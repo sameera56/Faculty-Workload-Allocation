@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10233f">
+  <title>Faculty Workload | Academic Office</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <section id="login-screen" class="login-screen">
+    <form id="login-form" class="login-card">
+      <div class="brand-mark">FW</div>
+      <p class="eyebrow">ACADEMIC OPERATIONS</p>
+      <h1>Welcome back</h1>
+      <p class="muted">Sign in to manage faculty workload and assignments.</p>
+      <label>Email address<input name="email" type="email" autocomplete="username" required></label>
+      <label>Password<input name="password" type="password" autocomplete="current-password" required></label>
+      <div id="login-error" class="inline-error" role="alert"></div>
+      <button class="button primary wide" type="submit">Sign in <span aria-hidden="true">→</span></button>
+      <small>Administrator access only</small>
+    </form>
+  </section>
+
+  <div id="application" class="app-shell hidden">
+    <aside id="sidebar" class="sidebar">
+      <a class="brand" href="#" data-page="dashboard"><span class="brand-mark">FW</span><span>Faculty<span class="brand-light">Flow</span></span></a>
+      <div class="sidebar-label">WORKSPACE</div>
+      <nav id="navigation">
+        <button class="nav-link active" data-page="dashboard"><span>◫</span> Overview</button>
+        <button class="nav-link" data-page="faculty"><span>♙</span> Faculty</button>
+        <button class="nav-link" data-page="departments"><span>▦</span> Departments &amp; classes</button>
+        <button class="nav-link" data-page="subjects"><span>▤</span> Subjects</button>
+        <button class="nav-link" data-page="workload"><span>◴</span> Workload</button>
+        <button class="nav-link" data-page="allocation"><span>⤳</span> Allocation</button>
+        <button class="nav-link" data-page="timetable"><span>▦</span> Timetable</button>
+        <button class="nav-link" data-page="reports"><span>▥</span> Reports</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="sidebar-note"><span class="status-dot"></span><span><b>Allocation engine</b><small>Ready to plan</small></span></div>
+        <button id="logout-button" class="nav-link logout"><span>↪</span> Sign out</button>
+      </div>
+    </aside>
+    <main class="main">
+      <header class="topbar">
+        <button id="menu-button" class="icon-button mobile-menu" aria-label="Toggle navigation">☰</button>
+        <div><p class="eyebrow">ACADEMIC OFFICE</p><h1 id="page-title">Overview</h1></div>
+        <div class="topbar-right"><span class="today" id="today-label"></span><span class="avatar">AD</span><span id="admin-name" class="admin-name">Administrator</span></div>
+      </header>
+      <div id="toast" class="toast" role="status"></div>
+      <section id="content" class="content" aria-live="polite"></section>
+    </main>
+  </div>
+
+  <dialog id="modal">
+    <form id="modal-form" method="dialog">
+      <div class="modal-head"><div><p class="eyebrow">RECORD DETAILS</p><h2 id="modal-title">Add record</h2></div><button type="button" class="icon-button" data-modal-close aria-label="Close">×</button></div>
+      <div id="modal-fields" class="form-grid"></div>
+      <div class="modal-actions"><button type="button" class="button secondary" data-close>Cancel</button><button type="submit" class="button primary">Save changes</button></div>
+    </form>
+  </dialog>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
