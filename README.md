@@ -132,7 +132,7 @@ The dashboard loads Chart.js from jsDelivr; without internet access, the rest of
 
 ## GitHub Pages preview (static frontend only)
 
-GitHub Pages serves static files only. It does **not** run the Express API, administrator server authentication, sessions, or MySQL. The frontend detects GitHub Pages and switches to an explicitly labeled browser-only preview using fictional sample data saved in that browser's local storage. Demo sign-in is `demo@facultyflow.local` / `faculty-demo`; these values are not real credentials. Preview edits do not update the Node.js/MySQL application.
+GitHub Pages serves static files only. It does **not** run the Express API, administrator server authentication, sessions, or MySQL. The frontend detects GitHub Pages and switches to an explicitly labeled browser-only preview using fictional sample data saved in that browser's local storage. Select **Continue with demo**, or sign in with `demo@facultyflow.local` / `faculty-demo`; these are demo credentials, not real administrator credentials. Preview edits do not update the Node.js/MySQL application.
 
 The existing GitHub Pages branch deployment serves the repository root. The root `index.html`, `style.css`, `api.js`, `demoApi.js`, and `app.js` therefore use relative asset URLs so they resolve beneath `/<repository>/`. The deploy workflow does not host or start the backend.
 

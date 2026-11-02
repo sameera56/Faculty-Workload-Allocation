@@ -55,7 +55,16 @@
     }
   }
 
-  document.querySelector('#static-login-note').classList.toggle('hidden', !api.isStaticDemo);
+  const staticLoginNote = document.querySelector('#static-login-note');
+  staticLoginNote.classList.toggle('hidden', !api.isStaticDemo);
+  if (api.isStaticDemo) {
+    staticLoginNote.querySelector('[data-demo-login]').addEventListener('click', () => {
+      const loginForm = document.querySelector('#login-form');
+      loginForm.elements.email.value = 'demo@facultyflow.local';
+      loginForm.elements.password.value = 'faculty-demo';
+      loginForm.requestSubmit();
+    });
+  }
 
   async function navigate(nextPage) {
     page = nextPage;
