@@ -129,3 +129,11 @@ seed.sql
 ```
 
 The dashboard loads Chart.js from jsDelivr; without internet access, the rest of the application remains usable, but charts will not render.
+
+## GitHub Pages preview (static frontend only)
+
+GitHub Pages serves static files only. It does **not** run the Express API, administrator server authentication, sessions, or MySQL. The frontend detects GitHub Pages and switches to an explicitly labeled browser-only preview using fictional sample data saved in that browser's local storage. Demo sign-in is `demo@facultyflow.local` / `faculty-demo`; these values are not real credentials. Preview edits do not update the Node.js/MySQL application.
+
+The existing GitHub Pages branch deployment serves the repository root. The root `index.html`, `style.css`, `api.js`, `demoApi.js`, and `app.js` therefore use relative asset URLs so they resolve beneath `/<repository>/`. The deploy workflow does not host or start the backend.
+
+To use real authentication, REST APIs, and MySQL, run the Node.js backend separately by following the configuration and `npm run dev` instructions above, then open its local URL (normally `http://localhost:3000`). GitHub Pages cannot securely connect to a private MySQL database or host this backend.

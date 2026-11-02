@@ -218,7 +218,11 @@
 
   function makeCsv(type, rows) {
     const columns = rows.length ? Object.keys(rows[0]) : [];
-    const quote = (value) => `"${String(value ?? '').replaceAll('"', '""')}"`;
+    const quote = (value) => {
+      let text = String(value ?? '');
+      if (/^[=+\-@]/.test(text)) text = `'${text}`;
+      return `"${text.replaceAll('"', '""')}"`;
+    };
     return [columns.map(quote).join(','), ...rows.map((row) => columns.map((key) => quote(row[key])).join(','))].join('\r\n');
   }
 
@@ -462,6 +466,11 @@
       if (body.slots.length && body.slots.length !== Number(subject.weekly_hours)) fail('Choose no slots or one slot for each weekly teaching hour.', 422);
       const keys = body.slots.map((slot) => `${slot.day_of_week}:${slot.period}`);
       if (new Set(keys).size !== keys.length) fail('Timetable slots must not be duplicated.', 422);
+      const classConflict = state.subjects.some((other) =>
+        other.id !== subject.id && other.class_id === subject.class_id
+        && (other.slots || []).some((slot) => keys.includes(`${slot.day_of_week}:${slot.period}`))
+      );
+      if (classConflict) fail('The class already has a subject in one or more selected timetable periods.', 409);
       subject.slots = body.slots;
       writeState(state);
       return wrap({ subject_id: subject.id, slots: subject.slots });

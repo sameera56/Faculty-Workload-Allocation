@@ -24,7 +24,7 @@
 
   function toast(message, error = false) {
     const node = document.querySelector('#toast');
-    node.textContent = message;
+    node.textContent = !error && api.isStaticDemo ? `${message} (browser demo only)` : message;
     node.className = `toast show${error ? ' error' : ''}`;
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => { node.className = 'toast'; }, 3400);
@@ -103,7 +103,8 @@
       ['Pending assignments', stats.pending_subjects, '⌛']
     ];
     content.innerHTML = `
-      ${heading(`Good ${new Date().getHours() < 12 ? 'morning' : 'day'}, Administrator`, 'A live view of teaching capacity and assignment progress.')}
+      ${heading(`Good ${new Date().getHours() < 12 ? 'morning' : 'day'}, Administrator`,
+        api.isStaticDemo ? 'A browser-only sample view of teaching capacity and assignment progress.' : 'A live view of teaching capacity and assignment progress.')}
       <div class="cards">${cards.map(([label, value, icon]) => `<article class="stat-card"><span class="stat-label">${label}</span><span class="stat-icon">${icon}</span><strong>${Number(value || 0).toLocaleString()}</strong></article>`).join('')}</div>
       <div class="dashboard-grid">
         <section class="panel"><div class="panel-title"><div><h3>Faculty workload distribution</h3><p>Assigned and remaining hours by faculty member</p></div></div><div class="chart-wrap"><canvas id="workload-chart"></canvas></div></section>
@@ -193,7 +194,7 @@
     const references = await loadReferenceData();
     content.innerHTML = `${heading('Faculty allocation', 'Preview a fair, explainable plan before committing it—or assign a subject manually.')}
       <div class="preview-card"><h3>Automatic allocation</h3><p>The planner uses matching department and specialization, weekly capacity, configured availability, timetable conflicts, and current workload. Ties are resolved by faculty ID.</p><div class="toolbar-group"><button class="button secondary" data-action="preview-allocation">Preview plan</button><button class="button primary" data-action="confirm-allocation" disabled id="confirm-plan">Confirm and save</button></div><div id="allocation-preview"></div></div>
-      <section class="panel"><div class="panel-title"><div><h3>Manual assignment</h3><p>Eligible faculty are checked again by the server before saving.</p></div></div>
+    <section class="panel"><div class="panel-title"><div><h3>Manual assignment</h3><p>${api.isStaticDemo ? 'Faculty eligibility is checked in this browser-only demo.' : 'Eligible faculty are checked again by the server before saving.'}</p></div></div>
         <form id="manual-form" class="toolbar-group" style="flex-wrap:wrap">
           <select name="subject_id" required><option value="">Select a subject</option>${references.subjects.map((s) => `<option value="${s.id}">${esc(s.subject_code)} · ${esc(s.name)} (${s.weekly_hours}h)${s.faculty_name ? ` — assigned to ${esc(s.faculty_name)}` : ''}</option>`).join('')}</select>
           <select name="faculty_id" required disabled><option value="">Choose subject first</option></select>
@@ -236,7 +237,8 @@
       result(api.get('/api/reports/conflicts/summary'))
     ]);
     const headers = rows.length ? Object.keys(rows[0]) : [];
-    content.innerHTML = `${heading('Reports & exports', 'Review live database reports and download CSV files for further analysis.')}
+    content.innerHTML = `${heading('Reports & exports',
+      api.isStaticDemo ? 'Review sample reports and download browser-generated CSV files.' : 'Review live database reports and download CSV files for further analysis.')}
       <div class="table-toolbar" style="padding-left:0;border:0"><select id="report-type"><option value="faculty" ${type === 'faculty' ? 'selected' : ''}>Faculty-wise</option><option value="department" ${type === 'department' ? 'selected' : ''}>Department-wise</option><option value="subject" ${type === 'subject' ? 'selected' : ''}>Subject-wise</option></select><button class="button secondary" data-action="export-csv" data-type="${type}">Download CSV</button></div>
       <div class="table-panel">${table(headers.map((h) => h.replaceAll('_', ' ')), rows.map((row) => `<tr>${headers.map((key) => `<td>${esc(row[key] ?? '—')}</td>`).join('')}</tr>`).join(''), 'No report rows are available yet.')}</div>
       <div class="dashboard-grid" style="margin-top:16px"><section class="panel"><div class="panel-title"><div><h3>Unassigned subjects</h3><p>Subjects still requiring a faculty member</p></div></div>${table(['Subject', 'Department', 'Weekly hours'], conflictData.unassigned.map((s) => `<tr><td>${esc(s.subject_code)} · ${esc(s.name)}</td><td>${esc(s.department)}</td><td>${s.weekly_hours}</td></tr>`).join(''), 'All subjects have an assignment.')}</section>
